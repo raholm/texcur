@@ -1,0 +1,2 @@
+# texcur
+Text Curation
