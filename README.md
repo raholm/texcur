@@ -1,2 +1,2 @@
 # texcur
-Text Curation
+Text Curation in R
