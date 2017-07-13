@@ -70,17 +70,6 @@ rm_regexp <- function(corpus, pattern) {
 #' @export
 rm_emails <- function(corpus)  {
     rm_regexp(corpus, "\\b\\S+@\\S+.\\S\\b")
-    ## .check_corpus(corpus)
-    ## .rm_emails(corpus)
-}
-
-#' @keywords internal
-.rm_emails <- function(corpus) {
-    .rm_emails_helper <- function(text) {
-        stringr::str_trim(stringr::str_replace_all(text, "\\b\\S+@\\S+.\\S\\b", ""))
-    }
-
-    .apply(corpus, .rm_emails_helper)
 }
 
 #' Removes urls from corpus
@@ -91,17 +80,6 @@ rm_emails <- function(corpus)  {
 #' @export
 rm_urls <- function(corpus) {
     rm_regexp(corpus, "\\b((https?|ftp|file):\\/\\/)?\\S+\\.\\S+\\b")
-    ## .check_corpus(corpus)
-    ## .rm_urls(corpus)
-}
-
-#' @keywords internal
-.rm_urls <- function(corpus) {
-    .rm_urls_helper <- function(text) {
-        stringr::str_trim(stringr::str_replace_all(text, "\\b((https?|ftp|file):\\/\\/)?\\S+\\.\\S+\\b", ""))
-    }
-
-    .apply(corpus, .rm_urls_helper)
 }
 
 #' Removes extra whitespace from corpus
