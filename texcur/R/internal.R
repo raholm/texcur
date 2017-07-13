@@ -38,3 +38,15 @@
     incorrect_column_type <- dplyr::data_frame(text=c(123, 321))
     expect_error(func(incorrect_column_type, ...))
 }
+
+#' @keywords internal
+.check_incorrect_tokenized_corpus_input <- function(func, ...) {
+    incorrect_object_type <- data.frame()
+    expect_error(func(incorrect_object_type, ...))
+
+    incorrect_column_name <- dplyr::data_frame(text=c("hello", "world"))
+    expect_error(func(incorrect_column_name, ...))
+
+    incorrect_column_type <- dplyr::data_frame(token=c(123, 321))
+    expect_error(func(incorrect_column_type, ...))
+}
