@@ -1,45 +1,3 @@
-#' Removes numbers from corpus
-#'
-#' It does not remove numbers embedded in words such as 'hello123', '123hello', 'h3ll0'.
-#'
-#' @param corpus A dataframe of the corpus
-#' @return A filtered corpus
-#'
-#' @export
-rm_numbers <- function(corpus) {
-    .check_corpus(corpus)
-    .rm_numbers(corpus)
-}
-
-#' @keywords internal
-.rm_numbers <- function(corpus) {
-    .rm_numbers_helper <- function(text) {
-        stringr::str_trim(stringr::str_replace_all(text, "\\b\\d+\\b", ""))
-    }
-
-    .apply(corpus, .rm_numbers_helper)
-}
-
-#' Removes non-alphanumeric characters from corpus
-#'
-#' @param corpus A dataframe of the corpus
-#' @return A filtered corpus
-#'
-#' @export
-rm_non_alphanumeric <- function(corpus) {
-    .check_corpus(corpus)
-    .rm_non_alphanumeric(corpus)
-}
-
-#' @keywords internal
-.rm_non_alphanumeric <- function(corpus) {
-    .rm_non_alphanumeric_helper <- function(text) {
-        stringr::str_trim(stringr::str_replace_all(text, "[[:punct:]^]", ""))
-    }
-
-    .apply(corpus, .rm_non_alphanumeric_helper)
-}
-
 #' Removes based on regular expression
 #'
 #' @param corpus A dataframe of the corpus
@@ -60,6 +18,28 @@ rm_regexp <- function(corpus, pattern) {
     }
 
     .apply(corpus, .rm_regexp_helper)
+}
+
+#' Removes numbers from corpus
+#'
+#' It does not remove numbers embedded in words such as 'hello123', '123hello', 'h3ll0'.
+#'
+#' @param corpus A dataframe of the corpus
+#' @return A filtered corpus
+#'
+#' @export
+rm_numbers <- function(corpus) {
+    rm_regexp(corpus, "\\b\\d+\\b")
+}
+
+#' Removes non-alphanumeric characters from corpus
+#'
+#' @param corpus A dataframe of the corpus
+#' @return A filtered corpus
+#'
+#' @export
+rm_non_alphanumeric <- function(corpus) {
+    rm_regexp(corpus, "[[:punct:]^]")
 }
 
 #' Removes emails from corpus
