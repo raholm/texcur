@@ -24,24 +24,22 @@ test_that("rm_whitespace raises an error for invalid input", {
     .check_incorrect_corpus_input(rm_whitespace)
 })
 
-test_that("rm_rare_words raises an error for invalid input", {
-    .check_incorrect_corpus_input(rm_rare_words, rare_word_limit=1)
-    expect_error(rm_rare_words(dplyr::data_frame(text=c("hello", "world"), 0)))
-    expect_error(rm_rare_words(dplyr::data_frame(text=c("hello", "world"), "")))
-    expect_error(rm_rare_words(dplyr::data_frame(text=c("hello", "world"), NULL)))
-})
-
-test_that("rm_common_words raises an error for invalid input", {
-    .check_incorrect_corpus_input(rm_common_words, common_word_limit=1)
-    expect_error(rm_common_words(dplyr::data_frame(text=c("hello", "world"), 0)))
-    expect_error(rm_common_words(dplyr::data_frame(text=c("hello", "world"), "")))
-    expect_error(rm_common_words(dplyr::data_frame(text=c("hello", "world"), NULL)))
-})
-
 test_that("rm_words raises an error for invalid input", {
-    .check_incorrect_corpus_input(rm_words, words=c("", ""))
-    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world"), NULL)))
-    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world"), 123)))
+    .check_incorrect_corpus_input(rm_words)
+
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), common_word_limit=0))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), common_word_limit=""))
+
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), words=123))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), words=c(1, 2, 3)))
+
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), rare_word_limit=0))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), rare_word_limit=""))
+
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=data.frame()))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=dplyr::data_frame()))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=dplyr::data_frame(text=c("hello"))))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=dplyr::data_frame(token=c(1, 2, 3))))
 })
 
 test_that("rm_numbers removes numbers from corpus", {
@@ -115,44 +113,55 @@ test_that("rm_whitespace removes extra whitespace from corpus", {
     expect_equal(actual, expected)
 })
 
-test_that("rm_rare_words removes rare words from corpus", {
-    corpus <- dplyr::data_frame(text=c("what the what is not the what is",
+test_that("rm_words removes rare words from corpus", {
+    corpus <- dplyr::data_frame(id=c("1", "2"),
+                         text=c("what the what is not the what is",
                                        "is that your name or what"))
     rare_word_limit <- 2
 
-    actual <- rm_rare_words(corpus, rare_word_limit)
-    expected <- dplyr::data_frame(text=c("what what is what is", "is what"))
+    actual <- rm_words(corpus, rare_word_limit=rare_word_limit)
+    expected <- dplyr::data_frame(id=c("1", "2"),
+                                  text=c("what what is what is", "is what"))
 
     expect_equal(actual, expected)
 
     tokenized_corpus <- corpus %>% tf_tokenize(token="words")
-    actual <- rm_rare_words(corpus, rare_word_limit, tokenized_corpus)
+    actual <- rm_words(corpus, tokenized_corpus, rare_word_limit=rare_word_limit)
 
     expect_equal(actual, expected)
 })
 
-test_that("rm_common_words removes common words from corpus", {
-    corpus <- dplyr::data_frame(text=c("what the what is not the what is",
+test_that("rm_words removes common words from corpus", {
+    corpus <- dplyr::data_frame(id=c("1", "2"),
+                                text=c("what the what is not the what is",
                                        "is that your name or what"))
     common_word_limit <- 2
 
-    actual <- rm_common_words(corpus, common_word_limit)
-    expected <- dplyr::data_frame(text=c("not", "that your name or"))
+    actual <- rm_words(corpus, common_word_limit=common_word_limit)
+    expected <- dplyr::data_frame(id=c("1", "2"),
+                                  text=c("not", "that your name or"))
 
     expect_equal(actual, expected)
 
     tokenized_corpus <- corpus %>% tf_tokenize(token="words")
-    actual <- rm_common_words(corpus, common_word_limit, tokenized_corpus)
+    actual <- rm_words(corpus, tokenized_corpus, common_word_limit=common_word_limit)
 
     expect_equal(actual, expected)
 })
 
-test_that("rm_words removes words from corpus", {
-    corpus <- dplyr::data_frame(text=c("hello world", "test That this actually works"))
+test_that("rm_words removes specified words from corpus", {
+    corpus <- dplyr::data_frame(id=c("1", "2"),
+                                text=c("hello world", "test That this actually works"))
     words <- c("hello", "actually", "That")
 
-    actual <- rm_words(corpus, words)
-    expected <- dplyr::data_frame(text=c("world", "test this works"))
+    actual <- rm_words(corpus, words=words)
+    expected <- dplyr::data_frame(id=c("1", "2"),
+                                  text=c("world", "test this works"))
+
+    expect_equal(actual, expected)
+
+    tokenized_corpus <- corpus %>% tf_tokenize(token="words")
+    actual <- rm_words(corpus, tokenized_corpus, words=words)
 
     expect_equal(actual, expected)
 })

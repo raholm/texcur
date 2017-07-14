@@ -87,56 +87,50 @@ rm_whitespace <- function(corpus) {
     .apply(corpus, .rm_whitespace_helper)
 }
 
-#' Removes rare words from corpus
+#' Removes words from corpus
 #'
 #' @param corpus A dataframe of the corpus
+#' @param tokenized_corpus A dataframe containing the tokens of the corpus. If not specified, it will be created internally.
+#' @param words A list of words
+#' @param common_word_limit An integer defining the commonity in frequency
 #' @param rare_word_limit An integer defining the rarity in frequency
-#' @param tokenized_corpus (Optional) A tokenized version of the corpus used to find word frequencies
 #' @return A filtered corpus
 #'
 #' @export
-rm_rare_words <- function(corpus, rare_word_limit, tokenized_corpus=NULL) {
-    .check_corpus(corpus)
-    .check_tokenized_corpus(tokenized_corpus, null.ok=TRUE)
-    checkr::assert_integer(rare_word_limit, lower=1)
+rm_words <- function(corpus,
+                     tokenized_corpus=NULL,
+                     words=NULL,
+                     common_word_limit=NULL,
+                     rare_word_limit=NULL,
+                     ...) {
+    .check_corpus(corpus, has.id=TRUE)
+    .check_tokenized_corpus(tokenized_corpus, has.id=TRUE, null.ok=TRUE)
+    checkr::assert_character(words, null.ok=TRUE)
+    checkr::assert_integer(common_word_limit, lower=1, null.ok=TRUE)
+    checkr::assert_integer(rare_word_limit, lower=1, null.ok=TRUE)
 
     if (is.null(tokenized_corpus)) {
-        tokenized_corpus <- corpus %>% tf_tokenize(token="words")
+        tokenized_corpus <- corpus %>% tf_tokenize(...)
     }
 
-    rare_words <- .get_rare_words(tokenized_corpus, rare_word_limit)
-    .rm_words(corpus, rare_words, tokenized_corpus)
-}
+    words_to_remove <- words
 
-#' @keywords internal
-.get_rare_words <- function(tokenized_corpus, rare_word_limit) {
-    rare_words <- tokenized_corpus %>%
-        dplyr::count(token) %>%
-        dplyr::filter(n <= rare_word_limit) %>%
-        dplyr::mutate(n=NULL)
+    common_words <- NULL
+    rare_words <- NULL
 
-    rare_words$token
-}
-
-#' Removes common words from corpus
-#'
-#' @param corpus A dataframe of the corpus
-#' @param common_word_limit An integer defining the "commonity" in frequency
-#' @param tokenized_corpus (Optional) A tokenized version of the corpus used to find word frequencies
-#' @return A filtered corpus
-#'
-#' @export
-rm_common_words <- function(corpus, common_word_limit, tokenized_corpus=NULL) {
-    .check_corpus(corpus)
-    .check_tokenized_corpus(tokenized_corpus, null.ok=TRUE)
-    checkr::assert_integer(common_word_limit, lower=1)
-
-    if (is.null(tokenized_corpus)) {
-        tokenized_corpus <- corpus %>% tf_tokenize(token="words")
+    if (!is.null(common_word_limit)) {
+        common_words <- .get_common_words(tokenized_corpus, common_word_limit)
     }
 
-    common_words <- .get_common_words(tokenized_corpus, common_word_limit)
-    .rm_words(corpus, common_words, tokenized_corpus)
+    if (!is.null(rare_word_limit)) {
+        rare_words <- .get_rare_words(tokenized_corpus, rare_word_limit)
+    }
+
+    words_to_remove <- c(words_to_remove, common_words, rare_words)
+
+    if (is.null(words_to_remove) | length(words_to_remove) == 0) return(corpus)
+
+    .rm_words(corpus, words_to_remove, tokenized_corpus)
 }
 
 #' @keywords internal
@@ -149,28 +143,29 @@ rm_common_words <- function(corpus, common_word_limit, tokenized_corpus=NULL) {
     common_words$token
 }
 
-#' Removes specified words from corpus
-#'
-#' @param corpus A dataframe of the corpus
-#' @param rare_word_limit An integer defining the rarity in frequency
-#' @param tokenized_corpus Not yet implemented
-#' @return A filtered corpus
-#'
-#' @export
-rm_words <- function(corpus, words, tokenized_corpus=NULL) {
-    .check_corpus(corpus)
-    .check_tokenized_corpus(tokenized_corpus, null.ok=TRUE)
-    checkr::assert_character(words)
+#' @keywords internal
+.get_rare_words <- function(tokenized_corpus, rare_word_limit) {
+    rare_words <- tokenized_corpus %>%
+        dplyr::count(token) %>%
+        dplyr::filter(n <= rare_word_limit) %>%
+        dplyr::mutate(n=NULL)
 
-    .rm_words(corpus, words, tokenized_corpus)
+    rare_words$token
 }
 
-#' Could do this using tokenized corpus with anti_join,
-#' however it would require that we merge the remaining tokens
-#' to their respective document
-#'
 #' @keywords internal
-.rm_words <- function(corpus, words, tokenized_corpus=NULL) {
-    pattern <- paste("\\b(", paste(words, collapse="|"), ")\\s?", sep="")
-    corpus %>% rm_regexp(pattern)
+.rm_words <- function(corpus, words, tokenized_corpus) {
+    words <- dplyr::data_frame(token=words)
+
+    tokenized_corpus %>%
+        dplyr::mutate(row=row_number()) %>%
+        dplyr::anti_join(words, by="token") %>%
+        dplyr::arrange(row) %>%
+        dplyr::mutate(row=NULL) %>%
+        tf_merge_tokens(delim=" ")
+
+
+
+    ## pattern <- paste("\\b(", paste(words, collapse="|"), ")\\s?", sep="")
+    ## corpus %>% rm_regexp(pattern)
 }

@@ -2,14 +2,19 @@
 % Please edit documentation in R/remove.R
 \name{rm_words}
 \alias{rm_words}
-\title{Removes specified words from corpus}
+\title{Removes words from corpus}
 \usage{
-rm_words(corpus, words, tokenized_corpus = NULL)
+rm_words(corpus, tokenized_corpus = NULL, words = NULL,
+  common_word_limit = NULL, rare_word_limit = NULL, ...)
 }
 \arguments{
 \item{corpus}{A dataframe of the corpus}
 
-\item{tokenized_corpus}{Not yet implemented}
+\item{tokenized_corpus}{A dataframe containing the tokens of the corpus. If not specified, it will be created internally.}
+
+\item{words}{A list of words}
+
+\item{common_word_limit}{An integer defining the commonity in frequency}
 
 \item{rare_word_limit}{An integer defining the rarity in frequency}
 }
@@ -17,5 +22,5 @@ rm_words(corpus, words, tokenized_corpus = NULL)
 A filtered corpus
 }
 \description{
-Removes specified words from corpus
+Removes words from corpus
 }
