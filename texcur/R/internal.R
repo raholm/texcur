@@ -1,8 +1,15 @@
 #' @keywords internal
-.check_corpus <- function(corpus) {
+.check_corpus <- function(corpus, has.id=FALSE) {
     checkr::assert_type(corpus, "tbl_df")
-    checkr::assert_subset("text", names(corpus))
-    checkr::assert_character(corpus$text)
+
+    if (has.id) {
+        checkr::assert_subset(c("id", "text"), names(corpus))
+        checkr::assert_character(corpus$id)
+        checkr::assert_character(corpus$text)
+    } else {
+        checkr::assert_subset("text", names(corpus))
+        checkr::assert_character(corpus$text)
+    }
 }
 
 #' @keywords internal
