@@ -37,6 +37,6 @@ tf_merge_tokens <- function(tokenized_corpus, delim=" ") {
         dplyr::group_by(id) %>%
         dplyr::mutate(text=paste(token, sep="", collapse=delim),
                       token=NULL) %>%
-        dplyr::filter(row_number() <= 1) %>%
+        dplyr::filter(row_number() == 1) %>%
         dplyr::ungroup()
 }
