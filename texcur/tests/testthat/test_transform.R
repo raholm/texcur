@@ -37,6 +37,18 @@ test_that("tf_tokenize tokenize corpus", {
                                           "doing", "What", "is", "the", "meaning", "of", "life?"))
 
     expect_equal(actual, expected)
+
+    corpus <- dplyr::data_frame(id=c("1", "2", "3"),
+                                text=c("Hello World!",
+                                       "What are you doing",
+                                       "What is the meaning of life?"))
+
+    actual <- tf_tokenize(corpus)
+    expected <- dplyr::data_frame(id=c(rep("1", 2), rep("2", 4), rep("3", 6)),
+                                  token=c("Hello", "World",
+                                          "What", "are", "you", "doing",
+                                          "What", "is", "the", "meaning", "of", "life"))
+    expect_equal(actual, expected)
 })
 
 test_that("tf_merge_tokens constructs a corpus", {
