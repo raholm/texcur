@@ -36,10 +36,10 @@ test_that("rm_words raises an error for invalid input", {
     expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), rare_word_limit=0))
     expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), rare_word_limit=""))
 
-    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=data.frame()))
-    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=dplyr::data_frame()))
-    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=dplyr::data_frame(text=c("hello"))))
-    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokenized_corpus=dplyr::data_frame(token=c(1, 2, 3))))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=data.frame()))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=dplyr::data_frame()))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=dplyr::data_frame(text=c("hello"))))
+    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=dplyr::data_frame(token=c(1, 2, 3))))
 })
 
 test_that("rm_numbers removes numbers from corpus", {
@@ -125,8 +125,8 @@ test_that("rm_words removes rare words from corpus", {
 
     expect_equal(actual, expected)
 
-    tokenized_corpus <- corpus %>% tf_tokenize(token="words")
-    actual <- rm_words(corpus, tokenized_corpus, rare_word_limit=rare_word_limit)
+    tokens <- corpus %>% tf_tokenize(token="words")
+    actual <- rm_words(corpus, tokens, rare_word_limit=rare_word_limit)
 
     expect_equal(actual, expected)
 })
@@ -143,8 +143,8 @@ test_that("rm_words removes common words from corpus", {
 
     expect_equal(actual, expected)
 
-    tokenized_corpus <- corpus %>% tf_tokenize(token="words")
-    actual <- rm_words(corpus, tokenized_corpus, common_word_limit=common_word_limit)
+    tokens <- corpus %>% tf_tokenize(token="words")
+    actual <- rm_words(corpus, tokens, common_word_limit=common_word_limit)
 
     expect_equal(actual, expected)
 })
@@ -160,8 +160,8 @@ test_that("rm_words removes specified words from corpus", {
 
     expect_equal(actual, expected)
 
-    tokenized_corpus <- corpus %>% tf_tokenize(token="words")
-    actual <- rm_words(corpus, tokenized_corpus, words=words)
+    tokens <- corpus %>% tf_tokenize(token="words")
+    actual <- rm_words(corpus, tokens, words=words)
 
     expect_equal(actual, expected)
 })

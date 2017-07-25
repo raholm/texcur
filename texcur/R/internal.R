@@ -13,19 +13,19 @@
 }
 
 #' @keywords internal
-.check_tokenized_corpus <- function(tokenized_corpus, null.ok=FALSE, has.id=FALSE) {
-    if (is.null(tokenized_corpus) & null.ok) return()
+.check_tokens <- function(tokens, null.ok=FALSE, has.id=FALSE) {
+    if (is.null(tokens) & null.ok) return()
 
 
-    checkr::assert_type(tokenized_corpus, "tbl_df")
+    checkr::assert_type(tokens, "tbl_df")
 
     if (has.id) {
-        checkr::assert_subset(c("id", "token"), names(tokenized_corpus))
-        checkr::assert_character(tokenized_corpus$token)
-        checkr::assert_character(tokenized_corpus$id)
+        checkr::assert_subset(c("id", "token"), names(tokens))
+        checkr::assert_character(tokens$token)
+        checkr::assert_character(tokens$id)
     } else {
-        checkr::assert_subset("token", names(tokenized_corpus))
-        checkr::assert_character(tokenized_corpus$token)
+        checkr::assert_subset("token", names(tokens))
+        checkr::assert_character(tokens$token)
     }
 }
 
@@ -47,7 +47,7 @@
 }
 
 #' @keywords internal
-.check_incorrect_tokenized_corpus_input <- function(func, ...) {
+.check_incorrect_tokens_input <- function(func, ...) {
     incorrect_object_type <- data.frame()
     expect_error(func(incorrect_object_type, ...))
 
