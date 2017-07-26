@@ -33,7 +33,14 @@ tf_merge_tokens <- function(tokens, delim=" ") {
     .check_tokens(tokens, has.id=TRUE)
     checkr::assert_string(delim)
 
-    tokens %>%
+    other_vars <- tokens %>%
+        dplyr::select(-token) %>%
+        dplyr::distinct(id, .keep_all=TRUE)
+
+    corpus <- tokens %>%
         dplyr::group_by(id) %>%
         dplyr::summarise(text=paste0(token, collapse=delim))
+
+    corpus %>%
+        dplyr::left_join(other_vars, by="id")
 }

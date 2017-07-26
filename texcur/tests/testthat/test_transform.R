@@ -67,3 +67,23 @@ test_that("tf_merge_tokens constructs a corpus", {
 
     expect_equal(actual, expected)
 })
+
+test_that("tf_merge_tokens constructs a corpus and keeps other columns", {
+    tokens <- dplyr::data_frame(id=c("1", "1", "2", "2", "4"),
+                                docid=c("2", "2", "1", "1", "3"),
+                                token=c("hello", "world!", "new", "years", "monkey"))
+
+    actual <- tf_merge_tokens(tokens)
+    expected <- dplyr::data_frame(id=c("1", "2", "4"),
+                                  docid=c("2", "1", "3"),
+                                  text=c("hello world!", "new years", "monkey"))
+
+    expect_equal(actual, expected)
+
+    actual <- tf_merge_tokens(tokens, delim="|")
+    expected <- dplyr::data_frame(id=c("1", "2", "4"),
+                                  docid=c("2", "1", "3"),
+                                  text=c("hello|world!", "new|years", "monkey"))
+
+    expect_equal(actual, expected)
+})
