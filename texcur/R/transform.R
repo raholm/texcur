@@ -35,7 +35,7 @@ tf_merge_tokens <- function(tokens, delim=" ") {
 
     tokens %>%
         dplyr::group_by(id) %>%
-        dplyr::mutate(text=paste(token, sep="", collapse=delim),
+        dplyr::mutate(text=paste0(token, collapse=delim),
                       token=NULL) %>%
         dplyr::filter(row_number() == 1) %>%
         dplyr::ungroup()
