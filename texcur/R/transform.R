@@ -30,7 +30,7 @@ tf_tokenize <- function(corpus, token="words", ...) {
 #'
 #' @export
 tf_merge_tokens <- function(tokens, delim=" ") {
-    .check_tokens(tokens, has.id=TRUE)
+    .check_tokens(tokens, has_id=TRUE)
     checkr::assert_string(delim)
 
     other_vars <- tokens %>%

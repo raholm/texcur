@@ -76,8 +76,6 @@ rm_whitespace <- function(corpus) {
 #' @keywords internal
 .rm_whitespace <- function(corpus) {
     .rm_whitespace_helper <- function(text) {
-        ## stringr::str_trim(stringr::str_replace_all(extra_whitespace, "(?!([ \\t\\r\\n]\\s))\\s+", ""))
-        ## stringr::str_trim(stringr::str_replace_all(text, "\\s+", " "))
         removed_spaces <- stringr::str_replace_all(text, "( ){2,}", " ")
         removed_tabs <- stringr::str_replace_all(removed_spaces, "(\t){2,}", "\t")
         removed_newlines <- stringr::str_replace_all(removed_tabs, "(\n){2,}", "\n")
@@ -103,11 +101,11 @@ rm_words <- function(corpus,
                      common_word_limit=NULL,
                      rare_word_limit=NULL,
                      ...) {
-    .check_corpus(corpus, has.id=TRUE)
-    .check_tokens(tokens, has.id=TRUE, null.ok=TRUE)
-    checkr::assert_character(words, null.ok=TRUE)
-    checkr::assert_integer(common_word_limit, lower=1, null.ok=TRUE)
-    checkr::assert_integer(rare_word_limit, lower=1, null.ok=TRUE)
+    .check_corpus(corpus, has_id=TRUE)
+    .check_tokens(tokens, has_id=TRUE, null_ok=TRUE)
+    checkr::assert_character(words, null_ok=TRUE)
+    checkr::assert_integer(common_word_limit, lower=1, null_ok=TRUE)
+    checkr::assert_integer(rare_word_limit, lower=1, null_ok=TRUE)
 
     if (is.null(tokens)) {
         tokens <- corpus %>% tf_tokenize(...)

@@ -1,8 +1,8 @@
 #' @keywords internal
-.check_corpus <- function(corpus, has.id=FALSE) {
+.check_corpus <- function(corpus, has_id=FALSE) {
     checkr::assert_type(corpus, "tbl_df")
 
-    if (has.id) {
+    if (has_id) {
         checkr::assert_subset(c("id", "text"), names(corpus))
         checkr::assert_character(corpus$id)
         checkr::assert_character(corpus$text)
@@ -13,13 +13,13 @@
 }
 
 #' @keywords internal
-.check_tokens <- function(tokens, null.ok=FALSE, has.id=FALSE) {
-    if (is.null(tokens) & null.ok) return()
+.check_tokens <- function(tokens, null_ok=FALSE, has_id=FALSE) {
+    if (is.null(tokens) & null_ok) return()
 
 
     checkr::assert_type(tokens, "tbl_df")
 
-    if (has.id) {
+    if (has_id) {
         checkr::assert_subset(c("id", "token"), names(tokens))
         checkr::assert_character(tokens$token)
         checkr::assert_character(tokens$id)
