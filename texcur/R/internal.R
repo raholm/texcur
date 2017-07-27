@@ -1,13 +1,11 @@
 #' @keywords internal
 .check_corpus <- function(corpus, has_id=FALSE) {
-    checkr::assert_type(corpus, "tbl_df")
-
     if (has_id) {
-        checkr::assert_subset(c("id", "text"), names(corpus))
+        checkr::assert_tidy_table(corpus, c("id", "text"))
         checkr::assert_character(corpus$id)
         checkr::assert_character(corpus$text)
     } else {
-        checkr::assert_subset("text", names(corpus))
+        checkr::assert_tidy_table(corpus, "text")
         checkr::assert_character(corpus$text)
     }
 }
@@ -16,15 +14,12 @@
 .check_tokens <- function(tokens, null_ok=FALSE, has_id=FALSE) {
     if (is.null(tokens) & null_ok) return()
 
-
-    checkr::assert_type(tokens, "tbl_df")
-
     if (has_id) {
-        checkr::assert_subset(c("id", "token"), names(tokens))
+        checkr::assert_tidy_table(tokens, c("id", "token"))
         checkr::assert_character(tokens$token)
         checkr::assert_character(tokens$id)
     } else {
-        checkr::assert_subset("token", names(tokens))
+        checkr::assert_tidy_table(tokens, "token")
         checkr::assert_character(tokens$token)
     }
 }
