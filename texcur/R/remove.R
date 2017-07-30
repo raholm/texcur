@@ -208,6 +208,6 @@ rm_words <- function(corpus,
         dplyr::mutate(row=row_number()) %>%
         dplyr::anti_join(words, by="token") %>%
         dplyr::arrange(row) %>%
-        dplyr::mutate(row=NULL)t %>%
+        dplyr::mutate(row=NULL) %>%
         tf_merge_tokens(delim=" ")
 }
