@@ -175,7 +175,7 @@ rm_words <- function(corpus,
 }
 
 .get_rare_words_by_percentage <- function(token_counts, rare_word_limit, inclusive) {
-    count_limit <- ceiling(sum(token_counts$n) * common_word_limit)
+    count_limit <- ceiling(sum(token_counts$n) * rare_word_limit)
 
     token_cumsum <- token_counts %>%
         dplyr::arrange(n) %>%
