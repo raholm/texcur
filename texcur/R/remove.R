@@ -182,8 +182,8 @@ get_rare_words_by_percentage <- function(token_counts, rare_word_limit, inclusiv
     count_limit <- ceiling(sum(token_counts$n) * rare_word_limit)
 
     token_cumsum <- token_counts %>%
-        dplyr::arrange(n) %>%
-        dplyr::mutate(n=cumsum(n))
+        dplyr::arrange(n)
+    token_cumsum$n <- cumsum(token_cumsum$n)
 
     .get_words_by_percentage(token_cumsum, count_limit, inclusive)
 }
