@@ -129,16 +129,16 @@ rm_words <- function(corpus,
 
     if (!checkr::is_null(common_word_limit)) {
         if (percentage)
-            common_words <- .get_common_words_by_percentage(token_counts, common_word_limit, inclusive)
+            common_words <- get_common_words_by_percentage(token_counts, common_word_limit, inclusive)
         else
-            common_words <- .get_common_words_by_count(token_counts, common_word_limit)
+            common_words <- get_common_words_by_count(token_counts, common_word_limit)
     }
 
     if (!checkr::is_null(rare_word_limit)) {
         if (percentage)
-            rare_words <- .get_rare_words_by_percentage(token_counts, rare_word_limit, inclusive)
+            rare_words <- get_rare_words_by_percentage(token_counts, rare_word_limit, inclusive)
         else
-            rare_words <- .get_rare_words_by_count(token_counts, rare_word_limit)
+            rare_words <- get_rare_words_by_count(token_counts, rare_word_limit)
     }
 
     words_to_remove <- c(words_to_remove, common_words, rare_words)
@@ -148,7 +148,8 @@ rm_words <- function(corpus,
     .rm_words(corpus, words_to_remove, tokens)
 }
 
-.get_common_words_by_count <- function(token_counts, common_word_limit) {
+#' @export
+get_common_words_by_count <- function(token_counts, common_word_limit) {
     common_words <- token_counts %>%
         dplyr::filter(n >= common_word_limit) %>%
         dplyr::select(token)
@@ -156,7 +157,8 @@ rm_words <- function(corpus,
     common_words$token
 }
 
-.get_common_words_by_percentage <- function(token_counts, common_word_limit, inclusive) {
+#' @export
+get_common_words_by_percentage <- function(token_counts, common_word_limit, inclusive) {
     count_limit <- ceiling(sum(token_counts$n) * common_word_limit)
 
     token_cumsum <- token_counts %>%
@@ -166,7 +168,8 @@ rm_words <- function(corpus,
     .get_words_by_percentage(token_cumsum, count_limit, inclusive)
 }
 
-.get_rare_words_by_count <- function(token_counts, rare_word_limit) {
+#' @export
+get_rare_words_by_count <- function(token_counts, rare_word_limit) {
     rare_words <- token_counts %>%
         dplyr::filter(n <= rare_word_limit) %>%
         dplyr::mutate(n=NULL)
@@ -174,7 +177,8 @@ rm_words <- function(corpus,
     rare_words$token
 }
 
-.get_rare_words_by_percentage <- function(token_counts, rare_word_limit, inclusive) {
+#' @export
+get_rare_words_by_percentage <- function(token_counts, rare_word_limit, inclusive) {
     count_limit <- ceiling(sum(token_counts$n) * rare_word_limit)
 
     token_cumsum <- token_counts %>%

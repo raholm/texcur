@@ -4,10 +4,10 @@
 \alias{tf_merge_tokens}
 \title{Transforms tokens to corpus based on document id}
 \usage{
-tf_merge_tokens(tokenized_corpus, delim = " ")
+tf_merge_tokens(tokens, delim = " ")
 }
 \arguments{
-\item{tokenized_corpus}{Tokenized corpus to merge}
+\item{tokens}{Tokens to to merge}
 
 \item{delim}{Delimiter between tokens}
 }
