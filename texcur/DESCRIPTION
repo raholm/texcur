@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: person("Rasmus", "Holm", email = "rasmus.holm723@gmail.com", role = c("aut", "cre"))
 Description: An R package for curating text.
 Depends: R (>= 3.4.1)
-License: What license is it under?
+License: CC0
 Encoding: UTF-8
 LazyData: true
 Suggests:
@@ -13,5 +13,7 @@ Imports:
     dplyr,
     tidytext,
     stringr,
-    checkr
+    checkr,
+    Rcpp
 RoxygenNote: 6.0.1
+LinkingTo: Rcpp

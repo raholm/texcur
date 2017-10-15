@@ -4,19 +4,23 @@
 \alias{rm_words}
 \title{Removes words from corpus}
 \usage{
-rm_words(corpus, tokenized_corpus = NULL, words = NULL,
-  common_word_limit = NULL, rare_word_limit = NULL, ...)
+rm_words(corpus, tokens = NULL, words = NULL, common_word_limit = NULL,
+  rare_word_limit = NULL, percentage = FALSE, inclusive = FALSE, ...)
 }
 \arguments{
 \item{corpus}{A dataframe of the corpus}
 
-\item{tokenized_corpus}{A dataframe containing the tokens of the corpus. If not specified, it will be created internally.}
+\item{tokens}{A dataframe containing the tokens of the corpus. If not specified, it will be created internally.}
 
 \item{words}{A list of words}
 
-\item{common_word_limit}{An integer defining the commonity in frequency}
+\item{common_word_limit}{An integer or numeric defining the commonity in frequency}
 
-\item{rare_word_limit}{An integer defining the rarity in frequency}
+\item{rare_word_limit}{An integer or numeric defining the rarity in frequency}
+
+\item{percentage}{If \code{TRUE}, then word limits will be interpreted as percentage, else as counts}
+
+\item{inclusive}{If \code{TRUE}, then if the cutoff point is between the same token type all of them will be removed, else none of them will be removed. Only used if \code{percentage}=\code{TRUE}.}
 }
 \value{
 A filtered corpus

@@ -52,3 +52,8 @@
     incorrect_column_type <- dplyr::data_frame(token=c(123, 321))
     expect_error(func(incorrect_column_type, ...))
 }
+
+
+get_tokenizer_module <- function() {
+    Rcpp::Module("mod_tokenizer", "texcur")
+}
