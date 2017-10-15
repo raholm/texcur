@@ -28,9 +28,9 @@ Rcpp::IntegerMatrix wit_transform(WordIndexTokenizer* const tokenizer,
     auto current_doc_id = document_ids(doc_id);
 
     for (unsigned token_id = 0; token_id < current_tokens.size(); ++token_id) {
-      result(global_idx, 1) = token_id + 1;
-      result(global_idx, 2) = current_doc_id;
-      result(global_idx, 3) = current_tokens.at(token_id);
+      result(global_idx, 0) = token_id + 1;
+      result(global_idx, 1) = current_doc_id;
+      result(global_idx, 2) = current_tokens.at(token_id);
 
       ++global_idx;
     }
