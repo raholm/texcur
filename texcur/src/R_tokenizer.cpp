@@ -35,13 +35,13 @@ Rcpp::DataFrame wit_transform(WordIndexTokenizer* const tokenizer,
     }
   }
 
-  return Rcpp::DataFrame::create(Rcpp::Named("id") = res_token_ids,
-                                 Rcpp::Named("doc") = res_doc_ids,
-                                 Rcpp::Named("token") = res_tokens);
+  return Rcpp::DataFrame::create(Rcpp::Named("id") = std::move(res_token_ids),
+                                 Rcpp::Named("doc") = std::move(res_doc_ids),
+                                 Rcpp::Named("token") = std::move(res_tokens));
 }
 
 Rcpp::StringVector wit_revert(WordIndexTokenizer* const tokenizer,
-                const Rcpp::IntegerVector& tokens) {
+                              const Rcpp::IntegerVector& tokens) {
   auto transformer = tokenizer->get_transformer();
   auto words = transformer.revert(Rcpp::as<WordIndexVector>(tokens));
   return words;
