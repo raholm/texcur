@@ -13,7 +13,6 @@ create_word_tokenizer <- function()  {
     new(class)
 }
 
-
 #' @title
 #' Creates a word index tokenizer.
 #'
