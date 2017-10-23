@@ -7,7 +7,7 @@
 #' @export
 rm_regexp <- function(corpus, pattern) {
     .check_corpus(corpus)
-    checkr::assert_string(pattern)
+    checkmate::assert_string(pattern)
     .rm_regexp(corpus, pattern)
 }
 
@@ -105,15 +105,15 @@ rm_words <- function(corpus,
                      ...) {
     .check_corpus(corpus, has_id=TRUE)
     .check_tokens(tokens, has_id=TRUE, null_ok=TRUE)
-    checkr::assert_character(words, null_ok=TRUE)
-    checkr::assert_logical(percentage)
+    checkmate::assert_character(words, null.ok=TRUE)
+    checkmate::assert_logical(percentage, len=1)
 
     if (percentage) {
-        checkr::assert_numeric(common_word_limit, len=1, lower=0, upper=1, null_ok=TRUE)
-        checkr::assert_numeric(rare_word_limit, len=1, lower=0, upper=1, null_ok=TRUE)
+        checkmate::assert_numeric(common_word_limit, len=1, lower=0, upper=1, null.ok=TRUE)
+        checkmate::assert_numeric(rare_word_limit, len=1, lower=0, upper=1, null.ok=TRUE)
     } else {
-        checkr::assert_integer(common_word_limit, len=1, lower=1, null_ok=TRUE)
-        checkr::assert_integer(rare_word_limit, len=1, lower=1, null_ok=TRUE)
+        checkmate::assert_numeric(common_word_limit, len=1, lower=1, null.ok=TRUE)
+        checkmate::assert_numeric(rare_word_limit, len=1, lower=1, null.ok=TRUE)
     }
 
     if (checkr::is_null(tokens)) {
@@ -127,14 +127,14 @@ rm_words <- function(corpus,
     common_words <- NULL
     rare_words <- NULL
 
-    if (!checkr::is_null(common_word_limit)) {
+    if (!is.null(common_word_limit)) {
         if (percentage)
             common_words <- get_common_words_by_percentage(token_counts, common_word_limit, inclusive)
         else
             common_words <- get_common_words_by_count(token_counts, common_word_limit)
     }
 
-    if (!checkr::is_null(rare_word_limit)) {
+    if (!is.null(rare_word_limit)) {
         if (percentage)
             rare_words <- get_rare_words_by_percentage(token_counts, rare_word_limit, inclusive)
         else
@@ -143,7 +143,7 @@ rm_words <- function(corpus,
 
     words_to_remove <- c(words_to_remove, common_words, rare_words)
 
-    if (checkr::is_null(words_to_remove) | length(words_to_remove) == 0) return(corpus)
+    if (is.null(words_to_remove) | length(words_to_remove) == 0) return(corpus)
 
     .rm_words(corpus, words_to_remove, tokens)
 }

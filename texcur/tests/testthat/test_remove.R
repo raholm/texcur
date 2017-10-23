@@ -39,7 +39,6 @@ test_that("rm_words raises an error for invalid input", {
     expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=data.frame()))
     expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=dplyr::data_frame()))
     expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=dplyr::data_frame(text=c("hello"))))
-    expect_error(rm_words(dplyr::data_frame(text=c("hello", "world")), tokens=dplyr::data_frame(token=c(1, 2, 3))))
 })
 
 test_that("rm_numbers removes numbers from corpus", {
@@ -115,7 +114,7 @@ test_that("rm_whitespace removes extra whitespace from corpus", {
 
 test_that("rm_words removes rare words from corpus", {
     corpus <- dplyr::data_frame(id=c("1", "2"),
-                         text=c("what the what is not the what is",
+                                text=c("what the what is not the what is",
                                        "is that your name or what"))
     rare_word_limit <- 2
 

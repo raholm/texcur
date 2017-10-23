@@ -1,12 +1,9 @@
 #' @keywords internal
 .check_corpus <- function(corpus, has_id=FALSE) {
     if (has_id) {
-        checkr::assert_tidy_table(corpus, c("id", "text"))
-        checkr::assert_character(corpus$id)
-        checkr::assert_character(corpus$text)
+        checkmate::assert_subset(c("id", "text"), names(corpus))
     } else {
-        checkr::assert_tidy_table(corpus, "text")
-        checkr::assert_character(corpus$text)
+        checkmate::assert_subset(c("text"), names(corpus))
     }
 }
 
@@ -15,12 +12,9 @@
     if (is.null(tokens) & null_ok) return()
 
     if (has_id) {
-        checkr::assert_tidy_table(tokens, c("id", "token"))
-        ## checkr::assert_character(tokens$id)
-        ## checkr::assert_character(tokens$token)
+        checkmate::assert_subset(c("id", "token"), names(tokens))
     } else {
-        checkr::assert_tidy_table(tokens, "token")
-        ## checkr::assert_character(tokens$token)
+        checkmate::assert_subset(c("token"), names(tokens))
     }
 }
 
@@ -36,9 +30,6 @@
 
     incorrect_column_name <- dplyr::data_frame(body=c("hello", "world"))
     expect_error(func(incorrect_column_name, ...))
-
-    incorrect_column_type <- dplyr::data_frame(text=c(123, 321))
-    expect_error(func(incorrect_column_type, ...))
 }
 
 #' @keywords internal
@@ -48,9 +39,6 @@
 
     incorrect_column_name <- dplyr::data_frame(text=c("hello", "world"))
     expect_error(func(incorrect_column_name, ...))
-
-    incorrect_column_type <- dplyr::data_frame(token=c(123, 321))
-    expect_error(func(incorrect_column_type, ...))
 }
 
 

@@ -53,7 +53,7 @@ test_that("tf_tokenize tokenize corpus", {
 
 test_that("tf_merge_tokens constructs a corpus", {
     tokens <- dplyr::data_frame(id=c("1", "1", "2", "2", "4"),
-                                          token=c("hello", "world!", "new", "years", "monkey"))
+                                token=c("hello", "world!", "new", "years", "monkey"))
 
     actual <- tf_merge_tokens(tokens)
     expected <- dplyr::data_frame(id=c("1", "2", "4"),
