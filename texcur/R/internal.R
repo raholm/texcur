@@ -16,11 +16,11 @@
 
     if (has_id) {
         checkr::assert_tidy_table(tokens, c("id", "token"))
-        checkr::assert_character(tokens$token)
-        checkr::assert_character(tokens$id)
+        ## checkr::assert_character(tokens$id)
+        ## checkr::assert_character(tokens$token)
     } else {
         checkr::assert_tidy_table(tokens, "token")
-        checkr::assert_character(tokens$token)
+        ## checkr::assert_character(tokens$token)
     }
 }
 
